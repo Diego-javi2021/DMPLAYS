@@ -40,7 +40,7 @@ func (p *Plataforma) Registrar(correo, nombre, password string) {
 
 	for _, u := range p.Usuarios {
 		if u.Correo == correo {
-			fmt.Println("❌ El correo ya está registrado.")
+			fmt.Println(" El correo ya está registrado.")
 			return
 		}
 	}
@@ -51,7 +51,7 @@ func (p *Plataforma) Registrar(correo, nombre, password string) {
 		Password: password,
 	})
 
-	fmt.Println("✅ Usuario registrado correctamente.")
+	fmt.Println(" Usuario registrado correctamente.")
 }
 
 // Iniciar sesión
@@ -60,23 +60,23 @@ func (p *Plataforma) Login(correo, password string) {
 	for i := range p.Usuarios {
 		if p.Usuarios[i].Correo == correo && p.Usuarios[i].Password == password {
 			p.Logueado = &p.Usuarios[i]
-			fmt.Println("✅ Bienvenido,", p.Logueado.Nombre)
+			fmt.Println(" Bienvenido,", p.Logueado.Nombre)
 			return
 		}
 	}
 
-	fmt.Println("❌ Credenciales incorrectas.")
+	fmt.Println(" Credenciales incorrectas.")
 }
 
 // Ver catálogo
 func (p *Plataforma) VerCatalogo() {
 
 	if p.Logueado == nil {
-		fmt.Println("⚠️ Debes iniciar sesión primero.")
+		fmt.Println(" Debes iniciar sesión primero.")
 		return
 	}
 
-	fmt.Println("\n🎬 Catálogo disponible:")
+	fmt.Println("\n Catálogo disponible:")
 	for _, v := range p.Videos {
 		fmt.Printf("ID: %d | %s\n", v.ID, v.Titulo)
 	}
@@ -86,27 +86,27 @@ func (p *Plataforma) VerCatalogo() {
 func (p *Plataforma) Reproducir(id int) {
 
 	if p.Logueado == nil {
-		fmt.Println("⚠️ Debes iniciar sesión primero.")
+		fmt.Println(" Debes iniciar sesión primero.")
 		return
 	}
 
 	for _, v := range p.Videos {
 		if v.ID == id {
-			fmt.Println("▶️ Reproduciendo:", v.Titulo)
+			fmt.Println(" Reproduciendo:", v.Titulo)
 			return
 		}
 	}
 
-	fmt.Println("❌ Película no encontrada.")
+	fmt.Println(" Película no encontrada.")
 }
 
 // Cerrar sesión
 func (p *Plataforma) Logout() {
 	if p.Logueado != nil {
-		fmt.Println("👋 Sesión cerrada.")
+		fmt.Println(" Sesión cerrada.")
 		p.Logueado = nil
 	} else {
-		fmt.Println("⚠️ No hay sesión activa.")
+		fmt.Println(" No hay sesión activa.")
 	}
 }
 
@@ -186,3 +186,4 @@ func main() {
 		}
 	}
 }
+
