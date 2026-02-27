@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DMPLAYS · Plataforma de videos</title>
+    <style>
+        /*  ESTILOS COMPLETOS */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(145deg, #0c0c14 0%, #18182a 100%);
+            color: #f0f0f0;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            max-width: 1280px;
+            width: 100%;
+            padding: 1.5rem 2rem;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            margin-bottom: 1rem;
+        }
+        .logo {
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            background: linear-gradient(135deg, #ffffff 0%, #b0b0ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+        nav a {
+            color: #b0b0c0;
+            margin-left: 2rem;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        nav a:hover { color: #ffffff; }
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 500;
+            margin: 3rem 0 1.8rem;
+            border-left: 5px solid #e50914;
+            padding-left: 1.2rem;
+            letter-spacing: -0.02em;
+        }
+        .auth-row {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .auth-card {
+            flex: 1 1 300px;
+            min-width: 280px;
+            background: rgba(20, 20, 30, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: 0 25px 40px -12px rgba(0, 0, 0, 0.7);
+        }
+        .auth-card h3 {
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin-bottom: 1.8rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 0.8rem;
+        }
+        .welcome-card {
+            background: rgba(20, 20, 30, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 24px;
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .welcome-card h2 { font-size: 2rem; font-weight: 500; margin-bottom: 1rem; }
+        .welcome-card p { color: #b0b0c0; margin-bottom: 2rem; }
+        .form-group { margin-bottom: 1.5rem; }
+        input, textarea {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            background: rgba(10, 10, 18, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.2s;
+            outline: none;
+            font-family: inherit;
+        }
+        textarea { min-height: 100px; resize: vertical; }
+        input[type="file"] {
+            padding: 0.8rem 1.2rem;
+            background: rgba(30, 30, 40, 0.9);
+            color: #b0b0c0;
+            border: 1px dashed rgba(255,255,255,0.2);
+        }
+        input[type="file"]::file-selector-button {
+            background: #e50914;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 40px;
+            margin-right: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        input[type="file"]::file-selector-button:hover { background: #f51e2a; }
+        input:focus, textarea:focus {
+            border-color: #e50914;
+            background: rgba(20, 20, 30, 0.9);
+            box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.2);
+        }
+        button {
+            background: #e50914;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 40px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+            box-shadow: 0 8px 18px rgba(229, 9, 20, 0.3);
+            letter-spacing: 0.3px;
+            width: 100%;
+        }
+        button:hover {
+            background: #f51e2a;
+            transform: scale(1.02);
+            box-shadow: 0 12px 24px rgba(229, 9, 20, 0.5);
+        }
+        button.secondary {
+            background: transparent;
+            border: 1px solid rgba(229, 9, 20, 0.7);
+            color: #e50914;
+            box-shadow: none;
+        }
+        button.secondary:hover {
+            background: rgba(229, 9, 20, 0.08);
+            border-color: #e50914;
+            transform: scale(1.02);
+        }
+        button.logout {
+            width: auto;
+            padding: 0.6rem 1.8rem;
+            background: transparent;
+            border: 1px solid #e50914;
+            color: #e50914;
+            box-shadow: none;
+        }
+        button.logout:hover { background: #e50914; color: white; }
+        .message {
+            padding: 0.9rem 1.2rem;
+            border-radius: 40px;
+            margin-top: 1.2rem;
+            font-weight: 500;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+        .success { background: rgba(0, 200, 100, 0.15); border: 1px solid #00cc66; color: #b3ffcf; }
+        .error { background: rgba(229, 9, 20, 0.15); border: 1px solid #e50914; color: #ffb3b3; }
+        .catalogo-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .video-grid, .live-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 1.8rem;
+            margin-top: 2rem;
+        }
+        .video-card, .live-card {
+            background: #191924;
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.25s ease;
+            border: 1px solid #2c2c3a;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            position: relative;
+        }
+        .video-card:hover, .live-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: #e50914;
+            box-shadow: 0 20px 30px -8px #e5091433;
+        }
+        .live-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: #e50914;
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.3rem 0.8rem;
+            border-radius: 40px;
+            text-transform: uppercase;
+            box-shadow: 0 4px 10px rgba(229, 9, 20, 0.5);
+        }
+        .video-thumbnail {
+            height: 150px;
+            background: linear-gradient(145deg, #252537, #151520);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5rem;
+            font-weight: 600;
+            color: #5a5a7a;
+            border-bottom: 1px solid #2c2c3a;
+        }
+        .video-info { padding: 1.2rem 1rem 1rem; }
+        .video-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: #f0f0ff;
+        }
+        .video-id span, .live-viewers span {
+            background: #2a2a3a;
+            padding: 0.3rem 0.8rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            color: #b0b0c0;
+            display: inline-block;
+        }
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: #a0a0b0;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+        }
+        .add-video-container {
+            margin: 2rem 0 1rem;
+            background: rgba(20, 20, 30, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 24px;
+            padding: 1.5rem;
+        }
+        .add-video-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+        .add-video-header h3 { font-size: 1.4rem; font-weight: 500; color: #ffffff; }
+        .add-video-form { margin-top: 1.5rem; display: none; }
+        .add-video-form.visible { display: block; }
+        .add-video-form .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        .add-video-form button { width: auto; padding: 0.8rem 2rem; }
+        footer {
+            margin-top: 5rem;
+            padding: 2rem 0 1rem;
+            text-align: center;
+            color: #5a5a70;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            font-size: 0.9rem;
+        }
+        .hidden { display: none; }
+        .flex-row { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+        @media (max-width: 600px) {
+            .container { padding: 1rem; }
+            header { flex-direction: column; gap: 1rem; }
+            nav a { margin: 0 1rem; }
+            .add-video-form .form-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">DMPLAYS</div>
+            <nav>
+                <a href="#" id="nav-inicio">Inicio</a>
+                <a href="#" id="nav-catalogo" class="hidden">Catálogo</a>
+                <a href="#" id="nav-envivo" class="hidden">En vivo</a>
+                <a href="#" id="nav-login">Login</a>
+                <a href="#" id="nav-registro">Registro</a>
+                <a href="#" id="nav-logout" class="hidden">Cerrar sesión</a>
+            </nav>
+        </header>
+
+        <main>
+            <!-- Autenticación -->
+            <section id="auth-section">
+                <h2 class="section-title">Acceso a la plataforma</h2>
+                <div class="auth-row">
+                    <div class="auth-card">
+                        <h3>Registro</h3>
+                        <div class="form-group"><input type="email" id="reg-correo" placeholder="Correo electrónico"></div>
+                        <div class="form-group"><input type="text" id="reg-nombre" placeholder="Nombre completo"></div>
+                        <div class="form-group"><input type="password" id="reg-password" placeholder="Contraseña"></div>
+                        <button onclick="registrar()">Registrarse</button>
+                        <div id="registro-message" class="message"></div>
+                    </div>
+                    <div class="auth-card">
+                        <h3>Iniciar sesión</h3>
+                        <div class="form-group"><input type="email" id="login-correo" placeholder="Correo electrónico"></div>
+                        <div class="form-group"><input type="password" id="login-password" placeholder="Contraseña"></div>
+                        <button onclick="iniciarSesion()">Entrar</button>
+                        <div id="login-message" class="message"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Bienvenida -->
+            <section id="welcome-section" class="hidden">
+                <div class="welcome-card">
+                    <h2>Bienvenido, <span id="user-name">Usuario</span></h2>
+                    <p>Explora nuestro catálogo y las transmisiones en vivo exclusivas.</p>
+                    <button class="logout" onclick="cerrarSesion()">Cerrar sesión</button>
+                </div>
+            </section>
+
+            <!-- Catálogo -->
+            <section id="catalogo-section" class="hidden">
+                <div class="catalogo-header">
+                    <h2 class="section-title">Catálogo de videos</h2>
+                    <div class="flex-row">
+                        <button onclick="toggleFormularioVideo()" class="secondary">+ Añadir video</button>
+                        <button onclick="cargarVideos()" class="secondary">Actualizar</button>
+                    </div>
+                </div>
+
+                <!-- Formulario para añadir video con archivo local y enlace de YouTube -->
+                <div class="add-video-container">
+                    <div class="add-video-header" onclick="toggleFormularioVideo()">
+                        <h3>Subir nuevo video </h3>
+                        <span id="toggle-icon">+</span>
+                    </div>
+                    <div id="add-video-form" class="add-video-form">
+                        <div class="form-group">
+                            <input type="text" id="video-titulo" placeholder="Título del video" required>
+                        </div>
+                        <div class="form-group">
+                            <textarea id="video-descripcion" placeholder="Descripción (opcional)"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <input type="url" id="video-url" placeholder="URL de YouTube (opcional, si no hay archivo)">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <input type="text" id="video-genero" placeholder="Género (opcional)">
+                            </div>
+                            <div class="form-group">
+                                <input type="file" id="video-archivo" accept="video/*">
+                                <small style="color: #aaa;">Si no seleccionas archivo, se usará la URL</small>
+                            </div>
+                        </div>
+                        <div class="flex-row" style="justify-content: flex-end;">
+                            <button onclick="agregarVideo()">Publicar video</button>
+                            <button class="secondary" onclick="toggleFormularioVideo()">Cancelar</button>
+                        </div>
+                        <div id="add-video-message" class="message"></div>
+                    </div>
+                </div>
+
+                <div id="videos" class="video-grid"></div>
+                <div id="loading" class="loading" style="display: none;">Cargando videos...</div>
+            </section>
+
+            <!-- En vivo -->
+            <section id="live-section" class="hidden">
+                <h2 class="section-title">Transmisiones en vivo</h2>
+                <div id="live-videos" class="live-grid"></div>
+            </section>
+        </main>
+
+        <footer>DMPLAYS © 2025 · Todos los derechos reservados</footer>
+    </div>
+
+    <script>
+        const API_BASE = '';
+        let isLoggedIn = false;
+        let currentUser = null;
+
+        // Claves para localStorage (videos simulados)
+        const STORAGE_SIMULATED_VIDEOS = 'dmplays_simulated_videos';
+
+        // Inicializar videos simulados con algunos ejemplos que incluyan URL de YouTube
+        if (!localStorage.getItem(STORAGE_SIMULATED_VIDEOS)) {
+            const videosEjemplo = [
+                {
+                    id: -1,
+                    titulo: 'Tráiler Interestelar',
+                    descripcion: 'Tráiler oficial',
+                    genero: 'Ciencia ficción',
+                    url: 'https://www.youtube.com/watch?v=zSWdZVtXT7E'
+                },
+                {
+                    id: -2,
+                    titulo: 'Tráiler Matrix',
+                    descripcion: 'Tráiler oficial',
+                    genero: 'Acción',
+                    url: 'https://www.youtube.com/watch?v=vKQi3bBA1y8'
+                }
+            ];
+            localStorage.setItem(STORAGE_SIMULATED_VIDEOS, JSON.stringify(videosEjemplo));
+        }
+
+        // Cargar sesión desde localStorage
+        (function() {
+            const stored = localStorage.getItem('dmplays_user');
+            if (stored) {
+                try {
+                    currentUser = JSON.parse(stored);
+                    isLoggedIn = true;
+                } catch (e) {}
+            }
+        })();
+
+        // Elementos DOM
+        const authSection = document.getElementById('auth-section');
+        const welcomeSection = document.getElementById('welcome-section');
+        const catalogoSection = document.getElementById('catalogo-section');
+        const liveSection = document.getElementById('live-section');
+        const userNameSpan = document.getElementById('user-name');
+        const navInicio = document.getElementById('nav-inicio');
+        const navCatalogo = document.getElementById('nav-catalogo');
+        const navEnvivo = document.getElementById('nav-envivo');
+        const navLogin = document.getElementById('nav-login');
+        const navRegistro = document.getElementById('nav-registro');
+        const navLogout = document.getElementById('nav-logout');
+        const addVideoForm = document.getElementById('add-video-form');
+        const toggleIcon = document.getElementById('toggle-icon');
+
+        function actualizarUI() {
+            if (isLoggedIn) {
+                authSection.classList.add('hidden');
+                welcomeSection.classList.remove('hidden');
+                catalogoSection.classList.remove('hidden');
+                liveSection.classList.remove('hidden');
+                navCatalogo.classList.remove('hidden');
+                navEnvivo.classList.remove('hidden');
+                navLogin.classList.add('hidden');
+                navRegistro.classList.add('hidden');
+                navLogout.classList.remove('hidden');
+                if (currentUser && currentUser.nombre) {
+                    userNameSpan.textContent = currentUser.nombre;
+                }
+                if (document.getElementById('videos').children.length === 0) {
+                    cargarVideos();
+                }
+                cargarLivesSimulados();
+            } else {
+                authSection.classList.remove('hidden');
+                welcomeSection.classList.add('hidden');
+                catalogoSection.classList.add('hidden');
+                liveSection.classList.add('hidden');
+                navCatalogo.classList.add('hidden');
+                navEnvivo.classList.add('hidden');
+                navLogin.classList.remove('hidden');
+                navRegistro.classList.remove('hidden');
+                navLogout.classList.add('hidden');
+                document.getElementById('videos').innerHTML = '';
+                document.getElementById('live-videos').innerHTML = '';
+            }
+        }
+
+        function mostrarMensaje(elementoId, texto, tipo) {
+            const el = document.getElementById(elementoId);
+            el.textContent = texto;
+            el.className = `message ${tipo}`;
+            setTimeout(() => { el.textContent = ''; el.className = 'message'; }, 5000);
+        }
+
+        function toggleFormularioVideo() {
+            addVideoForm.classList.toggle('visible');
+            toggleIcon.textContent = addVideoForm.classList.contains('visible') ? '−' : '+';
+        }
+
+        // REGISTRO
+        function registrar() {
+            const correo = document.getElementById('reg-correo').value.trim();
+            const nombre = document.getElementById('reg-nombre').value.trim();
+            const password = document.getElementById('reg-password').value.trim();
+            if (!correo || !nombre || !password) {
+                mostrarMensaje('registro-message', 'Todos los campos son obligatorios', 'error');
+                return;
+            }
+            fetch(API_BASE + '/usuarios', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ correo, nombre, password })
+            })
+            .then(res => {
+                if (!res.ok) return res.text().then(text => { throw new Error(text); });
+                return res.json();
+            })
+            .then(() => {
+                mostrarMensaje('registro-message', 'Usuario registrado correctamente', 'success');
+                document.getElementById('reg-correo').value = '';
+                document.getElementById('reg-nombre').value = '';
+                document.getElementById('reg-password').value = '';
+            })
+            .catch(err => mostrarMensaje('registro-message', 'Error: ' + err.message, 'error'));
+        }
+
+        // LOGIN
+        function iniciarSesion() {
+            const correo = document.getElementById('login-correo').value.trim();
+            const password = document.getElementById('login-password').value.trim();
+            if (!correo || !password) {
+                mostrarMensaje('login-message', 'Correo y contraseña son obligatorios', 'error');
+                return;
+            }
+            fetch(API_BASE + '/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ correo, password })
+            })
+            .then(res => {
+                if (!res.ok) return res.text().then(text => { throw new Error(text); });
+                return res.text();
+            })
+            .then(() => {
+                currentUser = { nombre: correo.split('@')[0], correo };
+                localStorage.setItem('dmplays_user', JSON.stringify(currentUser));
+                isLoggedIn = true;
+                actualizarUI();
+                mostrarMensaje('login-message', 'Sesión iniciada correctamente', 'success');
+                document.getElementById('login-correo').value = '';
+                document.getElementById('login-password').value = '';
+            })
+            .catch(err => mostrarMensaje('login-message', 'Error: ' + err.message, 'error'));
+        }
+
+        // CERRAR SESIÓN
+        function cerrarSesion() {
+            fetch(API_BASE + '/logout', { method: 'POST' }).catch(() => {});
+            localStorage.removeItem('dmplays_user');
+            isLoggedIn = false;
+            currentUser = null;
+            actualizarUI();
+        }
+
+        // Función para manejar clic en tarjeta de video
+        function manejarClicVideo(video) {
+            // Prioridad: si tiene url, abrirla; si tiene archivo simulado, mostrar mensaje
+            if (video.url) {
+                window.open(video.url, '_blank');
+            } else if (video.archivo) {
+                alert('Este video es simulado: ' + video.archivo);
+            } else {
+                alert('No hay enlace disponible para este video.');
+            }
+        }
+
+        // CARGAR VIDEOS (combina los del backend con los simulados)
+        function cargarVideos() {
+            const contenedor = document.getElementById('videos');
+            const loading = document.getElementById('loading');
+            contenedor.innerHTML = '';
+            loading.style.display = 'block';
+
+            // Obtener videos del backend
+            fetch(API_BASE + '/videos')
+            .then(res => {
+                if (!res.ok) throw new Error('Error al obtener videos del servidor');
+                return res.json();
+            })
+            .then(videosBackend => {
+                const videosBackendConURL = videosBackend.map(v => {
+                    if (v.titulo === 'Interestelar') {
+                        v.url = 'https://www.youtube.com/watch?v=zSWdZVtXT7E';
+                    } else if (v.titulo === 'Matrix') {
+                        v.url = 'https://www.youtube.com/watch?v=vKQi3bBA1y8';
+                    } else if (v.titulo === 'El Padrino') {
+                        v.url = 'https://www.youtube.com/watch?v=sY1S34973zA';
+                    }
+                    return v;
+                });
+
+                // Obtener videos simulados de localStorage
+                const videosSimulados = JSON.parse(localStorage.getItem(STORAGE_SIMULATED_VIDEOS)) || [];
+                // Combinar
+                const todosLosVideos = [...videosBackendConURL, ...videosSimulados];
+                loading.style.display = 'none';
+                if (todosLosVideos.length === 0) {
+                    contenedor.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:3rem; color:#aaa;">No hay videos disponibles.</div>';
+                    return;
+                }
+                todosLosVideos.forEach(video => {
+                    const card = document.createElement('div');
+                    card.className = 'video-card';
+                    // Añadir evento de clic
+                    card.addEventListener('click', () => manejarClicVideo(video));
+                    const inicial = video.titulo ? video.titulo.charAt(0).toUpperCase() : '▶';
+                    card.innerHTML = `
+                        <div class="video-thumbnail">${inicial}</div>
+                        <div class="video-info">
+                            <div class="video-title">${video.titulo || 'Sin título'}</div>
+                            <div class="video-id"><span>ID: ${video.id || '—'}</span></div>
+                        </div>
+                    `;
+                    contenedor.appendChild(card);
+                });
+            })
+            .catch(err => {
+                loading.style.display = 'none';
+                contenedor.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:2rem; color:#ffaaaa;">Error al cargar: ${err.message}</div>`;
+            });
+        }
+
+        // AGREGAR VIDEO (simulado con archivo o URL)
+        function agregarVideo() {
+            const titulo = document.getElementById('video-titulo').value.trim();
+            const descripcion = document.getElementById('video-descripcion').value.trim();
+            const genero = document.getElementById('video-genero').value.trim();
+            const url = document.getElementById('video-url').value.trim();
+            const archivoInput = document.getElementById('video-archivo');
+            const archivo = archivoInput.files[0];
+
+            if (!titulo) {
+                mostrarMensaje('add-video-message', 'El título es obligatorio', 'error');
+                return;
+            }
+            if (!archivo && !url) {
+                mostrarMensaje('add-video-message', 'Debes seleccionar un archivo o proporcionar una URL de YouTube', 'error');
+                return;
+            }
+
+            // Crear un objeto de video simulado
+            const nuevosSimulados = JSON.parse(localStorage.getItem(STORAGE_SIMULATED_VIDEOS));
+            const nuevoId = - (nuevosSimulados.length + 1); // IDs negativos
+            const nuevoVideo = {
+                id: nuevoId,
+                titulo: titulo,
+                descripcion: descripcion,
+                genero: genero,
+                url: url || null,
+                archivo: archivo ? archivo.name : null
+            };
+            nuevosSimulados.push(nuevoVideo);
+            localStorage.setItem(STORAGE_SIMULATED_VIDEOS, JSON.stringify(nuevosSimulados));
+
+            mostrarMensaje('add-video-message', 'Video publicado correctamente (simulado)', 'success');
+            document.getElementById('video-titulo').value = '';
+            document.getElementById('video-descripcion').value = '';
+            document.getElementById('video-genero').value = '';
+            document.getElementById('video-url').value = '';
+            archivoInput.value = '';
+            if (addVideoForm.classList.contains('visible')) toggleFormularioVideo();
+            cargarVideos(); // Recargar lista
+        }
+
+        // CARGAR TRANSMISIONES EN VIVO (simuladas)
+        function cargarLivesSimulados() {
+            const contenedor = document.getElementById('live-videos');
+            const lives = [
+                { titulo: 'Concierto en directo', espectadores: 234 },
+                { titulo: 'Charla con expertos', espectadores: 89 },
+                { titulo: 'Gameplay exclusivo', espectadores: 567 },
+                { titulo: 'Entrevista backstage', espectadores: 120 }
+            ];
+            contenedor.innerHTML = '';
+            lives.forEach(live => {
+                const card = document.createElement('div');
+                card.className = 'live-card';
+                card.innerHTML = `
+                    <div class="live-badge">EN VIVO</div>
+                    <div class="video-thumbnail">LIVE</div>
+                    <div class="video-info">
+                        <div class="video-title">${live.titulo}</div>
+                        <div class="live-viewers"><span>${live.espectadores} espectadores</span></div>
+                    </div>
+                `;
+                contenedor.appendChild(card);
+            });
+        }
+
+        // Navegación
+        navInicio.addEventListener('click', (e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
+        navCatalogo.addEventListener('click', (e) => { e.preventDefault(); catalogoSection.scrollIntoView({ behavior: 'smooth' }); });
+        navEnvivo.addEventListener('click', (e) => { e.preventDefault(); liveSection.scrollIntoView({ behavior: 'smooth' }); });
+        navLogin.addEventListener('click', (e) => { e.preventDefault(); authSection.scrollIntoView({ behavior: 'smooth' }); });
+        navRegistro.addEventListener('click', (e) => { e.preventDefault(); authSection.scrollIntoView({ behavior: 'smooth' }); });
+        navLogout.addEventListener('click', (e) => { e.preventDefault(); cerrarSesion(); });
+
+        actualizarUI();
+    </script>
+</body>
+</html>
