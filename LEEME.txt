@@ -1,0 +1,8 @@
+Saludos Ing. los archivos del proyecto final son "proyecto_final.go, index.html "
+
+
+para ejecutar la parte del backend se utiliza el código:
+
+go run proyecto_final
+
+el cual nos dara un link como este "http://localhost:8080", simplemente lo ejecutamos y nos cargara a la pagina web
